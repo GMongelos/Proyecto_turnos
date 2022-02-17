@@ -2,7 +2,7 @@ import sys
 import time
 
 import conexion
-from src.Utils import separador, validar_input_dni, update_string
+import src.Utils as Utils
 
 
 class Program:
@@ -34,11 +34,11 @@ class Program:
     def agregar_turno(self):
         """Agrega un turno a la bd"""
 
-        separador()
+        Utils.separador()
         datos_turno = {
             'nombre': input("Nombre del paciente: "),
             'apellido': input("Apellido del paciente: "),
-            'dni': validar_input_dni(),
+            'dni': Utils.validar_input_dni(),
             'fecha': input("Fecha del turno(AAAA/MM/DD): "),
             'profesional': input("Profesional que lo atiende: "),
             'observaciones': input("Observaciones(opcional): ")}
@@ -56,7 +56,7 @@ class Program:
         cursor.execute("""INSERT INTO turnos (nombre, apellido, dni, fecha, profesional, observaciones)
                             VALUES(:nombre, :apellido, :dni, :fecha, :profesional, :observaciones)""", datos_turno)
         self.con.commit()
-        separador("Turno agregado!")
+        Utils.separador("Turno agregado!")
 
     def ver_turnos(self):
         """Se visualizan en pantalla todos los turnos"""
@@ -67,7 +67,7 @@ class Program:
         turnos = cursor.fetchall()
 
         if not turnos:
-            separador("Aun no hay turnos cargados")
+            Utils.separador("Aun no hay turnos cargados")
         else:
             print("TURNOS:")
             columnas = 'NOMBRE', 'APELLIDO', 'DNI', 'FECHA', 'PROFESIONAL', 'OBSERVACIONES'
@@ -92,7 +92,7 @@ class Program:
                 for columna in columnas:
                     fila.append(datos[columna][i].ljust(anchos[columna]))
                 print(''.join(fila))
-            separador()
+            Utils.separador()
 
     def modificar_turno(self):
         """Busca el ultimo turno por dni y lo modifica/elimina, según la eleccion"""
@@ -105,7 +105,7 @@ class Program:
         turno_dni = cursor.fetchone()
 
         if not turno_dni:
-            separador("No se encontro ningun turno asociado al dni.")
+            Utils.separador("No se encontro ningun turno asociado al dni.")
         else:
             datos_turno = dict(
                 zip(('nombre', 'apellido', 'dni', 'fecha', 'profesional', 'observaciones'), turno_dni[1::]))
@@ -124,7 +124,7 @@ class Program:
                 return
 
             if index == '3':
-                valor = validar_input_dni()
+                valor = Utils.validar_input_dni()
             else:
                 valor = input("Ingrese el nuevo valor: ")
 
@@ -134,10 +134,10 @@ class Program:
             datos_turno.update(zip(datos_turno, lista_aux))
             datos_turno['id'] = turno_dni[0]
 
-            cursor.execute(f'UPDATE turnos {update_string()} WHERE id=:id', datos_turno)
+            cursor.execute(f'UPDATE turnos {Utils.update_string()} WHERE id=:id', datos_turno)
             self.con.commit()
             print("\nTurno actualizado!")
-            separador()
+            Utils.separador()
 
     def salir_aplicacion(self):
         """Termina la ejecucion de la aplicacion"""
