@@ -25,7 +25,7 @@ class Program:
 
         opcion = input("Elija una opcion: ")
         if not opcion.isdigit() or int(opcion) not in range(1, len(self.menu) + 1):
-            print("opcion incorrecta, intente de nuevo")
+            print("Opcion incorrecta, intente de nuevo")
         else:
             print()
             self.menu.get(opcion)[1]()
@@ -35,13 +35,13 @@ class Program:
         """Agrega un turno a la bd"""
 
         separador()
-        datos_turno = {}
-        datos_turno['nombre'] = input("Nombre del paciente: ")
-        datos_turno['apellido'] = input("Apellido del paciente: ")
-        datos_turno['dni'] = validar_input_dni()
-        datos_turno['fecha'] = input("Fecha del turno(AAAA/MM/DD): ")
-        datos_turno['profesional'] = input("Profesional que lo atiende: ")
-        datos_turno['observaciones'] = input("Observaciones(opcional): ")
+        datos_turno = {
+            'nombre': input("Nombre del paciente: "),
+            'apellido': input("Apellido del paciente: "),
+            'dni': validar_input_dni(),
+            'fecha': input("Fecha del turno(AAAA/MM/DD): "),
+            'profesional': input("Profesional que lo atiende: "),
+            'observaciones': input("Observaciones(opcional): ")}
 
         # Controla que los campos esenciales no esten vacios
         campos_escenciales = [k for k in datos_turno.keys() if k != 'observaciones']
@@ -117,7 +117,7 @@ class Program:
 
             index = input("\nQue desea modificar? ")
 
-            if index == len(datos_turno) + 1:
+            if int(index) == len(datos_turno) + 1:
                 cursor.execute("DELETE FROM turnos WHERE id=:id", {'id': turno_dni[0]})
                 self.con.commit()
                 print("\nTurno eliminado!")

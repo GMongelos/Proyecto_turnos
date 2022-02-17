@@ -23,5 +23,3 @@ def separador(text=''):
 def update_string():
     return "SET " + ', '.join(["nombre =:nombre", "apellido =:apellido", "dni =:dni",
                                "fecha =:fecha", "profesional =:profesional", "observaciones =:observaciones"])
-
-
