@@ -36,12 +36,13 @@ class Program:
 
         Utils.separador()
         datos_turno = {
-            'nombre': input("Nombre del paciente: "),
-            'apellido': input("Apellido del paciente: "),
-            'dni': Utils.validar_input_dni(),
-            'fecha': input("Fecha del turno(AAAA/MM/DD): "),
-            'profesional': input("Profesional que lo atiende: "),
-            'observaciones': input("Observaciones(opcional): ")}
+            'nombre': Utils.validar_input('texto', "Nombre del paciente: "),
+            'apellido': Utils.validar_input('texto', "Apellido del paciente: "),
+            'dni': Utils.validar_input('dni', "DNI del paciente: "),
+            'fecha': Utils.validar_input('fecha', "Fecha del turno(AAAA/MM/DD): "),
+            'profesional': Utils.validar_input('texto', "Profesional que lo atiende: "),
+            'observaciones': input("Observaciones(opcional): ")
+        }
 
         # Controla que los campos esenciales no esten vacios
         campos_escenciales = [k for k in datos_turno.keys() if k != 'observaciones']
