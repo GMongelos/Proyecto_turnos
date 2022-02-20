@@ -2,6 +2,7 @@
 Aplicacion principal
 """
 import os
+from src.Utils import Logger
 
 from src.Program import Program
 
@@ -11,9 +12,6 @@ if __name__ == '__main__':
         while True:
             p.run()
     except Exception as e:
-        print('Ha ocurrido un error')
-        dir_log = os.path.join(os.getcwd(), 'log')
-        path_log = os.path.join(dir_log, 'errores.log')
-        os.makedirs(dir_log, exist_ok=True)
-        with open(path_log, 'a') as f:
-            f.write(f"[ERROR]: {e}\n")
+        print('Ha ocurrido un error. Por favor revise el log para mas informacion.')
+        obj_logger = Logger()
+        obj_logger.loguear_error(e)
