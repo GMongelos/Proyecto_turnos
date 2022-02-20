@@ -1,14 +1,20 @@
 import sys
 import time
 
-import conexion
+from modelo import Database
 import src.Utils as Utils
 
 
 class Program:
     def __init__(self):
-        self.con = conexion.conectar()
-        conexion.crear_tabla(self.con)
+        """Al inicio del programa, me conecto con la db y creo la tabla vacia si no existe"""
+
+        # TODO: Si no se utiliza otro nombre que no sea "turnos" se rompe(parametrozar el nombre en las queries)
+        self.program_db = Database("turnos")
+
+        # Me conecto a la base de datos y creo la tabla
+        self.program_con = self.program_db.conectar()
+        self.program_db.crear_tabla(self.program_con)
 
         self.menu = {
             '1': ("Agregar turno", self.agregar_turno),
@@ -54,19 +60,13 @@ class Program:
             self.agregar_turno()
 
         # Insertamos el turno en la base
-        cursor = self.con.cursor()
-        cursor.execute("""INSERT INTO turnos (nombre, apellido, dni, fecha, profesional, observaciones)
-                            VALUES(:nombre, :apellido, :dni, :fecha, :profesional, :observaciones)""", datos_turno)
-        self.con.commit()
+        self.program_db.insertar_registro(self.program_con, datos_turno)
         Utils.separador("Turno agregado!")
 
     def ver_turnos(self):
         """Se visualizan en pantalla todos los turnos"""
 
-        cursor = self.con.cursor()
-        cursor.execute("SELECT * FROM turnos ORDER BY fecha DESC")
-
-        turnos = cursor.fetchall()
+        turnos = self.program_db.obtener_registros(self.program_con)
 
         if not turnos:
             Utils.separador("Aun no hay turnos cargados")
@@ -100,11 +100,7 @@ class Program:
         """Busca el ultimo turno por dni y lo modifica/elimina, según la eleccion"""
 
         dni = input("Ingrese el dni para buscar su ultimo turno: ")
-
-        cursor = self.con.cursor()
-        cursor.execute("SELECT * FROM turnos WHERE dni = :dni ORDER BY fecha", {'dni': dni})
-
-        turno_dni = cursor.fetchone()
+        turno_dni = self.program_db.seleccionar_registro(self.program_con, dni)
 
         if not turno_dni:
             Utils.separador("No se encontro ningun turno asociado al dni.")
@@ -120,25 +116,28 @@ class Program:
             index = input("\nQue desea modificar? ")
 
             if int(index) == len(datos_turno) + 1:
-                cursor.execute("DELETE FROM turnos WHERE id=:id", {'id': turno_dni[0]})
-                self.con.commit()
+                # Borramos el registro de la base
+                self.program_db.borrar_registro(self.program_con, turno_dni[0])
                 print("\nTurno eliminado!")
+                Utils.separador()
                 return
 
+            # Si quiere modificar el dni validamos su input. TODO: validar inputs para el resto de los campos
             if index == '3':
                 validador = Utils.ValidadorInput()
                 valor = validador.validar('dni', "Ingrese el nuevo dni:")
             else:
                 valor = input("Ingrese el nuevo valor: ")
 
+            # Armamos el registro para actualizarlo en la db
             lista_aux = list(datos_turno.values())
             lista_aux[int(index) - 1] = valor
 
             datos_turno.update(zip(datos_turno, lista_aux))
             datos_turno['id'] = turno_dni[0]
 
-            cursor.execute(f'UPDATE turnos {Utils.update_string()} WHERE id=:id', datos_turno)
-            self.con.commit()
+            # Actualizamos el registro
+            self.program_db.actualizar_registro(self.program_con, datos_turno)
             print("\nTurno actualizado!")
             Utils.separador()
 
