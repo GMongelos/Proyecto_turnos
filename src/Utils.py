@@ -42,6 +42,10 @@ class Logger:
         with open(self.path_log, 'a') as f:
             f.write(f"[WARNING][{self.obtener_timestamp()}]: {mensaje}\n")
 
+    def loguear_notice(self, mensaje):
+        with open(self.path_log, 'a') as f:
+            f.write(f"[NOTICE][{self.obtener_timestamp()}]: {mensaje}\n")
+
     @staticmethod
     def obtener_timestamp():
         return datetime.datetime.now()
