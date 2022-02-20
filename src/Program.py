@@ -29,18 +29,19 @@ class Program:
         else:
             print()
             self.menu.get(opcion)[1]()
-        # menu_principal()
 
     def agregar_turno(self):
         """Agrega un turno a la bd"""
 
+        validador = Utils.ValidadorInput()
+
         Utils.separador()
         datos_turno = {
-            'nombre': Utils.validar_input('texto', "Nombre del paciente: "),
-            'apellido': Utils.validar_input('texto', "Apellido del paciente: "),
-            'dni': Utils.validar_input('dni', "DNI del paciente: "),
-            'fecha': Utils.validar_input('fecha', "Fecha del turno(AAAA/MM/DD): "),
-            'profesional': Utils.validar_input('texto', "Profesional que lo atiende: "),
+            'nombre': validador.validar('texto', "Nombre del paciente: "),
+            'apellido': validador.validar('texto', "Apellido del paciente: "),
+            'dni': validador.validar('dni', "DNI del paciente: "),
+            'fecha': validador.validar('fecha', "Fecha del turno(AAAA/MM/DD): "),
+            'profesional': validador.validar('texto', "Profesional que lo atiende: "),
             'observaciones': input("Observaciones(opcional): ")
         }
 
@@ -125,7 +126,8 @@ class Program:
                 return
 
             if index == '3':
-                valor = Utils.validar_input_dni()
+                validador = Utils.ValidadorInput()
+                valor = validador.validar('dni', "Ingrese el nuevo dni:")
             else:
                 valor = input("Ingrese el nuevo valor: ")
 
