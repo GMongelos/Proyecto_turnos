@@ -15,3 +15,4 @@ if __name__ == '__main__':
         print('Ha ocurrido un error. Por favor revise el log para mas informacion.')
         logger = Logger()
         logger.loguear_error(e)
+        logger.loguear_exit()

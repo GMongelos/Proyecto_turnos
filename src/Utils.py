@@ -1,5 +1,6 @@
 import re
 
+
 class ValidadorInput:
     # Definiciones de los distintos patrones de regex
 

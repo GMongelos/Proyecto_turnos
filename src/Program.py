@@ -3,6 +3,7 @@ import time
 
 from modelo import Database
 from src.vista import consola
+from src.Logger import Logger
 import src.Utils as Utils
 
 
@@ -151,6 +152,8 @@ class Program:
         """Termina la ejecucion de la aplicacion"""
 
         consola.print("\nUsted decidio salir de la aplicacion")
+        logger = Logger()
+        logger.loguear_exit()
         time.sleep(3)
         self.con.close()
         sys.exit()
