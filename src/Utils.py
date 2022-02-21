@@ -1,10 +1,8 @@
 import re
-import os
-import datetime
-
 
 class ValidadorInput:
     # Definiciones de los distintos patrones de regex
+
     def __init__(self):
         self.regexpr = {
             'dni': r'^(PAS |pas )?[0-9]+$',
@@ -28,37 +26,8 @@ class ValidadorInput:
                 return input_validar
 
 
-class Logger:
-    def __init__(self):
-        self.dir_log = os.path.join(os.getcwd(), 'log')
-        self.path_log = os.path.join(self.dir_log, 'errores.log')
-        os.makedirs(self.dir_log, exist_ok=True)
-
-    def loguear_error(self, error):
-        with open(self.path_log, 'a') as f:
-            f.write(f"[ERROR][{self.obtener_timestamp()}]: {error}\n")
-
-    def loguear_warning(self, mensaje):
-        with open(self.path_log, 'a') as f:
-            f.write(f"[WARNING][{self.obtener_timestamp()}]: {mensaje}\n")
-
-    def loguear_notice(self, mensaje):
-        with open(self.path_log, 'a') as f:
-            f.write(f"[NOTICE][{self.obtener_timestamp()}]: {mensaje}\n")
-
-    @staticmethod
-    def obtener_timestamp():
-        return datetime.datetime.now()
-
-
-
 def separador(text=''):
     if text:
         print(f"\n{text}")
     print('-' * 50)
     print()
-
-
-def update_string():
-    return "SET " + ', '.join(["nombre =:nombre", "apellido =:apellido", "dni =:dni",
-                               "fecha =:fecha", "profesional =:profesional", "observaciones =:observaciones"])

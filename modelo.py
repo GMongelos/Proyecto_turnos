@@ -4,7 +4,12 @@ Conexion a la base de datos
 import sqlite3
 from sqlite3 import Error
 
-from src.Utils import Logger, update_string
+from src.Logger import Logger
+
+
+def update_string():
+    return "SET " + ', '.join(["nombre =:nombre", "apellido =:apellido", "dni =:dni",
+                               "fecha =:fecha", "profesional =:profesional", "observaciones =:observaciones"])
 
 
 class Database:
