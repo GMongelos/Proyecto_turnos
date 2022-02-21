@@ -1,5 +1,4 @@
 
-
 class Vista:
     def __init__(self):
         self.menu_vista = {
@@ -50,10 +49,17 @@ class Vista:
     def renderizar_salir_aplicacion(self):
         pass
 
-    def print(self, *args, **kwargs):
-        print(*args, **kwargs)
+    print = print
+    # def print(self, *args, **kwargs):
+    #     print(*args, **kwargs)
 
-    # print = print
+    def input(self, propmt='', validador=None):
+        val = input(propmt)
+        if validador:
+            while not validador(val):
+                print("El dato ingresado no es valido, intente de nuevo")
+                val = input(propmt)
+        return val
 
 
 consola = Vista()

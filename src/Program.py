@@ -4,6 +4,7 @@ import time
 from modelo import Database
 from src.vista import consola
 from src.Logger import Logger
+from src.validador import texto, dni, fecha
 import src.Utils as Utils
 
 
@@ -29,33 +30,17 @@ class Program:
 
         opcion = consola.renderizar_menu()
         self.menu.get(opcion)[1]()
-        # response = consola.get_input()
-        #
-        # for key, value in self.menu.items():
-        #     print(f'{key}. {value[0]}')
-        #
-        # opcion = input("Elija una opcion: ")
-        # if not opcion.isdigit() or int(opcion) not in range(1, len(self.menu) + 1):
-        #     print("Opcion incorrecta, intente de nuevo")
-        # else:
-        #     print()
-        #     self.menu.get(opcion)[1]()
 
     def agregar_turno(self):
         """Agrega un turno a la bd"""
 
-        validador = Utils.ValidadorInput()
-
-        datos_turno = consola.renderizar_agregar_turno(validador)
-
-        # Utils.separador()
         datos_turno = {
-            'nombre': validador.validar('texto', "Nombre del paciente: "),
-            'apellido': validador.validar('texto', "Apellido del paciente: "),
-            'dni': validador.validar('dni', "DNI del paciente: "),
-            'fecha': validador.validar('fecha', "Fecha del turno(AAAA/MM/DD): "),
-            'profesional': validador.validar('texto', "Profesional que lo atiende: "),
-            'observaciones': input("Observaciones(opcional): ")
+            'nombre': consola.input("Nombre del paciente: ", texto),
+            'apellido': consola.input("Apellido del paciente: ", texto),
+            'dni': consola.input("DNI del paciente: ", dni),
+            'fecha': consola.input("Fecha del turno(AAAA/MM/DD): ", fecha),
+            'profesional': consola.input("Profesional que lo atiende: ", texto),
+            'observaciones': consola.input("Observaciones(opcional): ")
         }
 
         # Controla que los campos esenciales no esten vacios
@@ -86,6 +71,7 @@ class Program:
                     datos[columnas[i]].append(dato)
 
             # versión one line
+            # Da el ancho de cada columna = el máximo entre el nombre de la columna y el máximo valor de la columna
             # anchos = {col: max(max(len(value) for value in values), len(col)) for col, values in datos.items()}
             anchos = {k: [] for k in columnas}
             for columna, valores in datos.items():
@@ -101,7 +87,7 @@ class Program:
                 for columna in columnas:
                     fila.append(datos[columna][i].ljust(anchos[columna]))
                 consola.print(''.join(fila))
-            Utils.separador()
+            consola.separador()
 
     def modificar_turno(self):
         """Busca el ultimo turno por dni y lo modifica/elimina, según la eleccion"""
@@ -110,7 +96,7 @@ class Program:
         turno_dni = self.db.seleccionar_registro(self.con, dni)
 
         if not turno_dni:
-            Utils.separador("No se encontro ningun turno asociado al dni.")
+            consola.separador("No se encontro ningun turno asociado al dni.")
         else:
             datos_turno = dict(
                 zip(('nombre', 'apellido', 'dni', 'fecha', 'profesional', 'observaciones'), turno_dni[1::]))
@@ -126,7 +112,7 @@ class Program:
                 # Borramos el registro de la base
                 self.db.borrar_registro(self.con, turno_dni[0])
                 print("\nTurno eliminado!")
-                Utils.separador()
+                consola.separador()
                 return
 
             # Si quiere modificar el dni validamos su input. TODO: validar inputs para el resto de los campos
@@ -146,7 +132,7 @@ class Program:
             # Actualizamos el registro
             self.db.actualizar_registro(self.con, datos_turno)
             print("\nTurno actualizado!")
-            Utils.separador()
+            consola.separador()
 
     def salir_aplicacion(self):
         """Termina la ejecucion de la aplicacion"""
