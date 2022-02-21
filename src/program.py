@@ -3,9 +3,8 @@ import time
 
 from modelo import Database
 from src.vista import consola
-from src.Logger import Logger
+from src.logger import Logger
 from src.validador import texto, dni, fecha
-import src.Utils as Utils
 
 
 class Program:
@@ -57,37 +56,18 @@ class Program:
 
     def ver_turnos(self):
         """Se visualizan en pantalla todos los turnos"""
-
         turnos = self.db.obtener_registros(self.con)
 
         if not turnos:
             consola.separador("Aún no hay turnos cargados")
         else:
-            consola.print("TURNOS:")
             columnas = 'NOMBRE', 'APELLIDO', 'DNI', 'FECHA', 'PROFESIONAL', 'OBSERVACIONES'
             datos = {k: [] for k in columnas}
             for turno in turnos:
                 for i, dato in enumerate(turno[1::]):
                     datos[columnas[i]].append(dato)
 
-            # versión one line
-            # Da el ancho de cada columna = el máximo entre el nombre de la columna y el máximo valor de la columna
-            # anchos = {col: max(max(len(value) for value in values), len(col)) for col, values in datos.items()}
-            anchos = {k: [] for k in columnas}
-            for columna, valores in datos.items():
-                largos = [len(v) for v in valores]
-                mas_largo = max(largos)
-                largo_encabezado = len(columna)
-                ancho = max(mas_largo, largo_encabezado) + 5
-                anchos[columna] = ancho
-
-            consola.print(''.join([k.ljust(v) for k, v in anchos.items()]))
-            for i in range(len(datos['NOMBRE'])):
-                fila = []
-                for columna in columnas:
-                    fila.append(datos[columna][i].ljust(anchos[columna]))
-                consola.print(''.join(fila))
-            consola.separador()
+            consola.renderizar_tabla(title="TURNOS", cols=columnas, rows=datos)
 
     def modificar_turno(self):
         """Busca el ultimo turno por dni y lo modifica/elimina, según la eleccion"""

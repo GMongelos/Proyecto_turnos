@@ -3,8 +3,8 @@ Aplicacion principal
 """
 import os
 
-from src.Logger import Logger
-from src.Program import Program
+from src.logger import Logger
+from src.program import Program
 
 if __name__ == '__main__':
     try:

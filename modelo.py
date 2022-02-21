@@ -4,7 +4,7 @@ Conexion a la base de datos
 import sqlite3
 from sqlite3 import Error
 
-from src.Logger import Logger
+from src.logger import Logger
 
 
 def update_string():

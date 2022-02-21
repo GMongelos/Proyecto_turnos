@@ -1,3 +1,5 @@
+from typing import Dict
+
 
 class Vista:
     def __init__(self):
@@ -65,5 +67,36 @@ class Vista:
         for count, (key, value) in enumerate(datos_turno.items(), 1):
             print(f'{count} - {key.capitalize()}: {value}')
         print(f'{len(datos_turno) + 1} - Eliminar Turno')
+
+    def renderizar_tabla(self, title="", cols=None, rows: Dict = None):
+        if title:
+            print(f'{title}:')
+
+        if not cols:
+            cols = [None] * len(rows[0])
+
+        # versión one line
+        # Da el ancho de cada columna = el máximo entre el nombre de la columna y el máximo valor de la columna
+        # anchos = {col: max(max(len(value) for value in values), len(col)) for col, values in datos.items()}
+
+        anchos = {k: [] for k in cols}
+        for columna, valores in rows.items():
+            largos = [len(v) for v in valores]
+            mas_largo = max(largos)
+            largo_encabezado = len(columna)
+            ancho = max(mas_largo, largo_encabezado) + 5
+            anchos[columna] = ancho
+
+        # Imprime headers
+        print(''.join([k.ljust(v) for k, v in anchos.items()]))
+
+        cant_rows = len(list(rows.values())[0])
+
+        for i in range(cant_rows):
+            fila = []
+            for c in cols:
+                fila.append(rows[c][i].ljust(anchos[c]))
+            print(''.join(fila))
+        self.separador()
 
 consola = Vista()
