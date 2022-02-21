@@ -61,5 +61,9 @@ class Vista:
                 val = input(propmt)
         return val
 
+    def renderizar_turno(self, datos_turno):
+        for count, (key, value) in enumerate(datos_turno.items(), 1):
+            print(f'{count} - {key.capitalize()}: {value}')
+        print(f'{len(datos_turno) + 1} - Eliminar Turno')
 
 consola = Vista()

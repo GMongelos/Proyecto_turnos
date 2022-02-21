@@ -92,8 +92,8 @@ class Program:
     def modificar_turno(self):
         """Busca el ultimo turno por dni y lo modifica/elimina, según la eleccion"""
 
-        dni = input("Ingrese el dni para buscar su ultimo turno: ")
-        turno_dni = self.db.seleccionar_registro(self.con, dni)
+        nro_dni = consola.input("Ingrese el dni para buscar su ultimo turno: ", dni)
+        turno_dni = self.db.seleccionar_registro(self.con, nro_dni)
 
         if not turno_dni:
             consola.separador("No se encontro ningun turno asociado al dni.")
@@ -102,25 +102,23 @@ class Program:
                 zip(('nombre', 'apellido', 'dni', 'fecha', 'profesional', 'observaciones'), turno_dni[1::]))
             print("\nTurno encontrado:")
             # count = 1
-            for count, (key, value) in enumerate(datos_turno.items(), 1):
-                print(f'{count} - {key.capitalize()}: {value}')
-            print(f'{len(datos_turno) + 1} - Eliminar Turno')
 
-            index = input("\nQue desea modificar? ")
+            consola.renderizar_turno(datos_turno)
+            index = consola.input("\nQue desea modificar? ")
 
             if int(index) == len(datos_turno) + 1:
                 # Borramos el registro de la base
                 self.db.borrar_registro(self.con, turno_dni[0])
-                print("\nTurno eliminado!")
+                consola.print("\nTurno eliminado!")
                 consola.separador()
                 return
 
             # Si quiere modificar el dni validamos su input. TODO: validar inputs para el resto de los campos
             if index == '3':
-                validador = Utils.ValidadorInput()
-                valor = validador.validar('dni', "Ingrese el nuevo dni:")
+                # validador = Utils.ValidadorInput()
+                valor = consola.input("Ingrese el nuevo dni:", dni)  #validador.validar('dni', "Ingrese el nuevo dni:")
             else:
-                valor = input("Ingrese el nuevo valor: ")
+                valor = consola.input("Ingrese el nuevo valor: ")
 
             # Armamos el registro para actualizarlo en la db
             lista_aux = list(datos_turno.values())
