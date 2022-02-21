@@ -5,6 +5,7 @@ import sqlite3
 from sqlite3 import Error
 
 from src.logger import Logger
+from src.model.turno import Turno
 
 
 def update_string():
@@ -66,12 +67,14 @@ class Database:
             self.db_logger.loguear_error(Error)
 
     @staticmethod
-    def insertar_registro(conexion, datos):
+    def insertar_registro(conexion, turno: Turno):
         """Inserta un registro nuevo en la tabla turnos"""
 
+        datos = turno.db_values()
+
         cursor = conexion.cursor()
-        cursor.execute("""INSERT INTO turnos (nombre, apellido, dni, fecha, profesional, observaciones)
-                                    VALUES(:nombre, :apellido, :dni, :fecha, :profesional, :observaciones)""",
+        cursor.execute(f"""INSERT INTO turnos ({', '.join(datos.keys())})
+                           VALUES({', '.join([f':{c}' for c in datos.keys()])})""",
                        datos)
         conexion.commit()
 

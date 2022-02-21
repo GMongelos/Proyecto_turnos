@@ -50,7 +50,7 @@ class Program:
             consola.print(e)
             self.agregar_turno()
         else:
-            self.db.insertar_registro(self.con, datos_turno)
+            self.db.insertar_registro(self.con, turno)
             consola.separador("Turno agregado!")
 
     def ver_turnos(self):
