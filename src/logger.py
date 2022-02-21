@@ -6,7 +6,7 @@ import sys
 class Logger:
     """Clase para loguear datos a distintos niveles"""
     exit_string = ("-" * 10) + " APLICACION TERMINADA " + ("-" * 10)
-    line_exep = sys.exc_info()[-1].tb_lineno
+    # line_exep = sys.exc_info()[-1].tb_lineno()
 
     def __init__(self):
         self.dir_log = os.path.join(os.getcwd(), 'log')
@@ -16,7 +16,7 @@ class Logger:
 
     def loguear_error(self, error):
         with open(self.path_log_error, 'a') as f:
-            f.write(f"[ERROR][{self.obtener_timestamp()}][LINEA {self.line_exep}]: {error}\n")
+            f.write(f"[ERROR][{self.obtener_timestamp()}][LINEA ]: {error}\n")
 
     def loguear_warning(self, mensaje):
         with open(self.path_log_info, 'a') as f:
