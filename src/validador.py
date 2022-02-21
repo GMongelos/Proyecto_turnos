@@ -9,12 +9,23 @@ regexpr = {
 
 
 def texto(s: str):
+    """
+    Validacion de tipo texto, espera por lo menos 2 caracteres
+    """
+
     return re.match(regexpr.get('texto'), s.strip())
 
 
 def dni(s: str):
+    """
+    Validacion de tipo dni, acepta solo numeros o un pasaporte
+    """
+
     return re.match(regexpr.get('dni'), s.strip())
 
 
 def fecha(s: str):
+    """
+    Validacion de tipo fecha, espera una fecha con el separador '/'
+    """
     return re.match(regexpr.get('fecha'), s.strip())
