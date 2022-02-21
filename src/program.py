@@ -2,6 +2,7 @@ import sys
 import time
 
 from modelo import Database
+from src.model.exceptions import CamposVaciosError
 from src.model.turno import Turno
 from src.vista import consola
 from src.logger import Logger
@@ -43,19 +44,14 @@ class Program:
             'observaciones': consola.input("Observaciones(opcional): ")
         }
 
-        turno = Turno(**datos_turno)
-
-        # Controla que los campos esenciales no esten vacios
-        campos_escenciales = [k for k in datos_turno.keys() if k != 'observaciones']
-        campos_vacios = [k for k in campos_escenciales if not datos_turno[k].strip()]
-
-        if campos_vacios:
-            consola.print(f'Error, el/los campo/s {", ".join(campos_vacios)} no puede/n ser vacíos')
+        try:
+            turno = Turno(**datos_turno)
+        except CamposVaciosError as e:
+            consola.print(e)
             self.agregar_turno()
-
-        # Insertamos el turno en la base
-        self.db.insertar_registro(self.con, datos_turno)
-        consola.separador("Turno agregado!")
+        else:
+            self.db.insertar_registro(self.con, datos_turno)
+            consola.separador("Turno agregado!")
 
     def ver_turnos(self):
         """Se visualizan en pantalla todos los turnos"""

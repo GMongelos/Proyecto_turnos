@@ -8,13 +8,13 @@ regexpr = {
 }
 
 
-def texto(s):
-    return re.match(regexpr.get('texto'), s)
+def texto(s: str):
+    return re.match(regexpr.get('texto'), s.strip())
 
 
-def dni(s):
-    return re.match(regexpr.get('dni'), s)
+def dni(s: str):
+    return re.match(regexpr.get('dni'), s.strip())
 
 
-def fecha(s):
-    return re.match(regexpr.get('fecha'), s)
+def fecha(s: str):
+    return re.match(regexpr.get('fecha'), s.strip())
