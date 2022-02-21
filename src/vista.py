@@ -1,8 +1,19 @@
+"""
+Visualizacion de elementos por consola
+"""
 from typing import Dict
 
 
 class Vista:
+    """
+    Clase que encapsula los renderizados de elementos por consola
+    """
+
     def __init__(self):
+        """
+        Instancia un menú predefinido
+        """
+
         self.menu_vista = {
             '1': "Agregar turno",
             '2': "Ver todos los turnos",
@@ -12,13 +23,19 @@ class Vista:
 
     @staticmethod
     def separador(text=''):
+        """
+        Imprime por pantalla una linea divisora, a modo de ayuda visual
+        """
         if text:
             print(f"\n{text}")
         print('-' * 50)
         print()
 
     def renderizar_menu(self):
-        """Renderiza el menu en pantalla y espera un input de usuario que define lo que va a hacer"""
+        """
+        Renderiza el menu en pantalla y espera un input de usuario que define lo que va a hacer
+        """
+
         for key, value in self.menu_vista.items():
             print(f'{key}. {value}')
 
@@ -31,6 +48,10 @@ class Vista:
             return opcion
 
     def renderizar_agregar_turno(self, validador):
+        """
+        Genera un mensaje en pantalla por cada input y lo valida segun el tipo
+        """
+
         self.separador()
         datos_turno = {
             'nombre': validador.validar('texto', "Nombre del paciente: "),
@@ -42,20 +63,15 @@ class Vista:
         }
         return datos_turno
 
-    def renderizar_ver_turnos(self):
-        pass
-
-    def renderizar_modificar_turnos(self):
-        pass
-
-    def renderizar_salir_aplicacion(self):
-        pass
-
     print = print
     # def print(self, *args, **kwargs):
     #     print(*args, **kwargs)
 
     def input(self, propmt='', validador=None):
+        """
+        Espera un input de usuario y lo valida segun el tipo especificado
+        """
+
         val = input(propmt)
         if validador:
             while not validador(val):
@@ -64,11 +80,19 @@ class Vista:
         return val
 
     def renderizar_turno(self, datos_turno):
+        """
+        Renderiza un turno en la consola
+        """
+
         for count, (key, value) in enumerate(datos_turno.items(), 1):
             print(f'{count} - {key.capitalize()}: {value}')
         print(f'{len(datos_turno) + 1} - Eliminar Turno')
 
     def renderizar_tabla(self, title="", cols=None, rows: Dict = None):
+        """
+        Renderiza una tabla y sus datos
+        """
+
         if title:
             print(f'{title}:')
 
