@@ -8,7 +8,7 @@ from src.Utils import Logger, update_string
 
 
 class Database:
-
+    """Clase que encapsula todos los métodos relacionados con un abmc"""
     def __init__(self, nombre):
         self.nombre_db = nombre + ".db"
         self.db_logger = Logger()
@@ -26,7 +26,6 @@ class Database:
     @staticmethod
     def crear_tabla(conexion):
         """Crea la tabla de turnos"""
-
         try:
             cursor_obj = conexion.cursor()
             cursor_obj.execute("""CREATE TABLE IF NOT EXISTS turnos(
