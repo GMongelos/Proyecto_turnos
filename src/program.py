@@ -2,6 +2,7 @@ import sys
 import time
 
 from modelo import Database
+from src.model.turno import Turno
 from src.vista import consola
 from src.logger import Logger
 from src.validador import texto, dni, fecha
@@ -41,6 +42,8 @@ class Program:
             'profesional': consola.input("Profesional que lo atiende: ", texto),
             'observaciones': consola.input("Observaciones(opcional): ")
         }
+
+        turno = Turno(**datos_turno)
 
         # Controla que los campos esenciales no esten vacios
         campos_escenciales = [k for k in datos_turno.keys() if k != 'observaciones']
