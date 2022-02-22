@@ -38,8 +38,8 @@ class Program:
         datos_turno = {
             'nombre': consola.input("Nombre del paciente: ", texto),
             'apellido': consola.input("Apellido del paciente: ", texto),
-            'dni': consola.input("DNI del paciente: ", dni),
-            'fecha': consola.input("Fecha del turno(AAAA/MM/DD): ", fecha),
+            'nro_dni': consola.input("DNI del paciente: ", dni),
+            '_fecha': consola.input("Fecha del turno(AAAA/MM/DD): ", fecha),
             'profesional': consola.input("Profesional que lo atiende: ", texto),
             'observaciones': consola.input("Observaciones(opcional): ")
         }
