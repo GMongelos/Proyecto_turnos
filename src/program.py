@@ -86,9 +86,9 @@ class Program:
             consola.renderizar_modificar_turno(menu)
             index = consola.input("\nQue desea modificar? ")
 
-            if int(index) == len(menu) + 1:
+            if int(index) == len(menu):
                 # Borramos el registro de la base
-                self.db.borrar_registro(self.con, turno.dni)
+                self.db.borrar_registro(self.con, id_db)
                 consola.print("\nTurno eliminado!")
                 consola.separador()
                 return
