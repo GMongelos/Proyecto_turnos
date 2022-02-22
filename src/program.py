@@ -72,43 +72,37 @@ class Program:
         """Busca el ultimo turno por dni y lo modifica/elimina, según la eleccion"""
 
         nro_dni = consola.input("Ingrese el dni para buscar su ultimo turno: ", dni)
-        turno_dni = self.db.seleccionar_registro(self.con, nro_dni)
+        datos_db = self.db.seleccionar_registro(self.con, nro_dni)
 
-        if not turno_dni:
+        if not datos_db:
             consola.separador("No se encontro ningun turno asociado al dni.")
         else:
-            datos_turno = dict(
-                zip(('nombre', 'apellido', 'dni', 'fecha', 'profesional', 'observaciones'), turno_dni[1::]))
-            print("\nTurno encontrado:")
-            # count = 1
+            turno = Turno(*datos_db[1::])
+            id_db = datos_db[0]
 
-            consola.renderizar_turno(datos_turno)
+            # consola.renderizar_turno(turno)
+            menu = {n: (k, v) for n, (k, v) in enumerate(turno.__dict__.items(), 1)}
+            menu[len(menu) + 1] = ("Eliminar Turno", None)
+
+            consola.renderizar_modificar_turno(menu)
             index = consola.input("\nQue desea modificar? ")
 
-            if int(index) == len(datos_turno) + 1:
+            if int(index) == len(menu) + 1:
                 # Borramos el registro de la base
-                self.db.borrar_registro(self.con, turno_dni[0])
+                self.db.borrar_registro(self.con, turno.dni)
                 consola.print("\nTurno eliminado!")
                 consola.separador()
                 return
 
-            # Si quiere modificar el dni validamos su input. TODO: validar inputs para el resto de los campos
-            if index == '3':
-                # validador = Utils.ValidadorInput()
-                valor = consola.input("Ingrese el nuevo dni:", dni)  #validador.validar('dni', "Ingrese el nuevo dni:")
             else:
-                valor = consola.input("Ingrese el nuevo valor: ")
-
-            # Armamos el registro para actualizarlo en la db
-            lista_aux = list(datos_turno.values())
-            lista_aux[int(index) - 1] = valor
-
-            datos_turno.update(zip(datos_turno, lista_aux))
-            datos_turno['id'] = turno_dni[0]
+                campo = menu[int(index)][0]
+                validador = turno.validadores[campo]
+                valor = consola.input(f"Ingrese nuevo valor para {campo.lower()}: ", validador)
+                turno.update(campo, valor)
 
             # Actualizamos el registro
-            self.db.actualizar_registro(self.con, datos_turno)
-            print("\nTurno actualizado!")
+            self.db.actualizar_registro(self.con, id_db, turno)
+            consola.print("\nTurno actualizado!")
             consola.separador()
 
     def salir_aplicacion(self):

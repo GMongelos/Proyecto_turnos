@@ -1,13 +1,22 @@
 from src.model.exceptions import CamposVaciosError
+from src.validador import texto, dni, fecha
 
 
 class Turno:
-    def __init__(self, nombre, apellido, dni, profesional, fecha, observaciones='', **kwargs):
+    validadores = {
+        'nombre': texto,
+        'apellido': texto,
+        'dni': dni,
+        'profesional': texto,
+        'fecha': fecha
+    }
+
+    def __init__(self, nombre, apellido, nro_dni, profesional, _fecha, observaciones='', **kwargs):
         self.nombre = nombre
         self.apellido = apellido
-        self.dni = dni
+        self.dni = nro_dni
         self.profesional = profesional
-        self.fecha = fecha
+        self.fecha = _fecha
         self.observaciones = observaciones if observaciones else ''
         self.validar()
 
@@ -20,3 +29,6 @@ class Turno:
 
     def db_values(self):
         return self.__dict__.copy()
+
+    def update(self, campo, valor):
+        self.__setattr__(campo, valor)

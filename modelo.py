@@ -103,9 +103,10 @@ class Database:
         self.db_logger.loguear_notice(f'Registro con id [{id_turno}] eliminado.')
 
     @staticmethod
-    def actualizar_registro(conexion, datos):
+    def actualizar_registro(conexion, _id, turno):
         """Actualiza un registro en la tabla segun su id"""
-
+        datos = turno.db_values()
+        datos['id'] = _id
         cursor = conexion.cursor()
         cursor.execute(f'UPDATE turnos {update_string()} WHERE id=:id', datos)
         conexion.commit()

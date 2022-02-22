@@ -1,7 +1,9 @@
 """
 Visualizacion de elementos por consola
 """
-from typing import Dict
+from typing import Dict, Tuple
+
+from src.model.turno import Turno
 
 
 class Vista:
@@ -79,14 +81,17 @@ class Vista:
                 val = input(propmt)
         return val
 
-    def renderizar_turno(self, datos_turno):
+    def renderizar_modificar_turno(self, menu: Dict[str, Tuple[str, str]]):
         """
         Renderiza un turno en la consola
         """
+        for n, (k, v) in menu.items():
+            print(f'{n} - {k}: {v if v else ""}')
 
-        for count, (key, value) in enumerate(datos_turno.items(), 1):
-            print(f'{count} - {key.capitalize()}: {value}')
-        print(f'{len(datos_turno) + 1} - Eliminar Turno')
+        # datos = turno.__dict__.copy()
+        # for count, (key, value) in enumerate(datos.items(), 1):
+        #     print(f'{count} - {key.capitalize()}: {value}')
+        # print(f'{len(datos) + 1} - Eliminar Turno')
 
     def renderizar_tabla(self, title="", cols=None, rows: Dict = None):
         """
