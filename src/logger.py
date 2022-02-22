@@ -22,8 +22,10 @@ class Logger:
         Loguea un error en errores.log
         """
 
+        exc_tb = sys.exc_info()[2]
+        archivo = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
         with open(self.path_log_error, 'a') as f:
-            f.write(f"[ERROR][{self.obtener_timestamp()}]: {error}\n")
+            f.write(f"[ERROR][{self.obtener_timestamp()}][Archivo: {archivo}][Linea {exc_tb.tb_lineno}]: {error}\n")
 
     def loguear_warning(self, mensaje):
         """
