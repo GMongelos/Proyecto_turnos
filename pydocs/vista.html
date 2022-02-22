@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module vista</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>vista</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/a446219/enzo/projects/Proyecto-turnos/src/vista.py">/home/a446219/enzo/projects/Proyecto-turnos/src/vista.py</a></font></td></tr></table>
+    <p><tt>Visualizacion&nbsp;de&nbsp;elementos&nbsp;por&nbsp;consola</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="vista.html#Vista">Vista</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Vista">class <strong>Vista</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Clase&nbsp;que&nbsp;encapsula&nbsp;los&nbsp;renderizados&nbsp;de&nbsp;elementos&nbsp;por&nbsp;consola<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Vista-__init__"><strong>__init__</strong></a>(self)</dt><dd><tt>Instancia&nbsp;un&nbsp;menú&nbsp;predefinido</tt></dd></dl>
+
+<dl><dt><a name="Vista-input"><strong>input</strong></a>(self, propmt='', validador=None)</dt><dd><tt>Espera&nbsp;un&nbsp;input&nbsp;de&nbsp;usuario&nbsp;y&nbsp;lo&nbsp;valida&nbsp;segun&nbsp;el&nbsp;tipo&nbsp;especificado</tt></dd></dl>
+
+<dl><dt><a name="Vista-renderizar_agregar_turno"><strong>renderizar_agregar_turno</strong></a>(self, validador)</dt><dd><tt>Genera&nbsp;un&nbsp;mensaje&nbsp;en&nbsp;pantalla&nbsp;por&nbsp;cada&nbsp;input&nbsp;y&nbsp;lo&nbsp;valida&nbsp;segun&nbsp;el&nbsp;tipo</tt></dd></dl>
+
+<dl><dt><a name="Vista-renderizar_menu"><strong>renderizar_menu</strong></a>(self)</dt><dd><tt>Renderiza&nbsp;el&nbsp;menu&nbsp;en&nbsp;pantalla&nbsp;y&nbsp;espera&nbsp;un&nbsp;input&nbsp;de&nbsp;usuario&nbsp;que&nbsp;define&nbsp;lo&nbsp;que&nbsp;va&nbsp;a&nbsp;hacer</tt></dd></dl>
+
+<dl><dt><a name="Vista-renderizar_modificar_turno"><strong>renderizar_modificar_turno</strong></a>(self, menu: Dict[str, Tuple[str, str]])</dt><dd><tt>Renderiza&nbsp;un&nbsp;turno&nbsp;en&nbsp;la&nbsp;consola</tt></dd></dl>
+
+<dl><dt><a name="Vista-renderizar_tabla"><strong>renderizar_tabla</strong></a>(self, title='', cols=None, rows: Dict = None)</dt><dd><tt>Renderiza&nbsp;una&nbsp;tabla&nbsp;y&nbsp;sus&nbsp;datos</tt></dd></dl>
+
+<hr>
+Static methods defined here:<br>
+<dl><dt><a name="Vista-print"><strong>print</strong></a>(...)</dt><dd><tt><a href="#Vista-print">print</a>(value,&nbsp;...,&nbsp;sep='&nbsp;',&nbsp;end='\n',&nbsp;file=sys.stdout,&nbsp;flush=False)<br>
+&nbsp;<br>
+Prints&nbsp;the&nbsp;values&nbsp;to&nbsp;a&nbsp;stream,&nbsp;or&nbsp;to&nbsp;sys.stdout&nbsp;by&nbsp;default.<br>
+Optional&nbsp;keyword&nbsp;arguments:<br>
+file:&nbsp;&nbsp;a&nbsp;file-like&nbsp;<a href="builtins.html#object">object</a>&nbsp;(stream);&nbsp;defaults&nbsp;to&nbsp;the&nbsp;current&nbsp;sys.stdout.<br>
+sep:&nbsp;&nbsp;&nbsp;string&nbsp;inserted&nbsp;between&nbsp;values,&nbsp;default&nbsp;a&nbsp;space.<br>
+end:&nbsp;&nbsp;&nbsp;string&nbsp;appended&nbsp;after&nbsp;the&nbsp;last&nbsp;value,&nbsp;default&nbsp;a&nbsp;newline.<br>
+flush:&nbsp;whether&nbsp;to&nbsp;forcibly&nbsp;flush&nbsp;the&nbsp;stream.</tt></dd></dl>
+
+<dl><dt><a name="Vista-separador"><strong>separador</strong></a>(text='')</dt><dd><tt>Imprime&nbsp;por&nbsp;pantalla&nbsp;una&nbsp;linea&nbsp;divisora,&nbsp;a&nbsp;modo&nbsp;de&nbsp;ayuda&nbsp;visual</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>Dict</strong> = typing.Dict<br>
+<strong>Tuple</strong> = typing.Tuple<br>
+<strong>consola</strong> = &lt;vista.Vista object&gt;</td></tr></table>
+</body></html>

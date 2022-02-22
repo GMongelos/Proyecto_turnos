@@ -80,7 +80,6 @@ class Program:
             turno = Turno(*datos_db[1::])
             id_db = datos_db[0]
 
-            # consola.renderizar_turno(turno)
             menu = {n: (k, v) for n, (k, v) in enumerate(turno.__dict__.items(), 1)}
             menu[len(menu) + 1] = ("Eliminar Turno", None)
 

@@ -3,6 +3,9 @@ from src.validador import texto, dni, fecha
 
 
 class Turno:
+    """
+    Modelo de turnos
+    """
     validadores = {
         'nombre': texto,
         'apellido': texto,
@@ -21,6 +24,9 @@ class Turno:
         self.validar()
 
     def validar(self):
+        """
+        Validaciones al crear el turno
+        """
         campos = self.__dict__.copy()
         del (campos['observaciones'])
         vacios = [k for k, v in campos.items() if not v.strip()]
@@ -28,7 +34,13 @@ class Turno:
             raise CamposVaciosError(vacios)
 
     def db_values(self):
+        """
+        Retorna el diccionario de valores que se almacenan en la db
+        """
         return self.__dict__.copy()
 
     def update(self, campo, valor):
+        """
+        Actualiza el valor de un campo
+        """
         self.__setattr__(campo, valor)
