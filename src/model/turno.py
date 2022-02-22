@@ -11,7 +11,8 @@ class Turno:
         'apellido': texto,
         'dni': dni,
         'profesional': texto,
-        'fecha': fecha
+        'fecha': fecha,
+        'observaciones': texto
     }
 
     def __init__(self, nombre, apellido, nro_dni, _fecha, profesional, observaciones='', **kwargs):
