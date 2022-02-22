@@ -1,4 +1,4 @@
-# Proyecto-turnos
+# Proyecto turnos
 Sistema de turnos v2.0
 
 ### Autores:
