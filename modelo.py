@@ -31,7 +31,7 @@ class Database:
         :param nombre: Nombre para la base de datos. Ej base -> base.db
         """
         self.nombre_db = nombre + ".db"
-        self.db_logger = Logger()
+        self.db_logger = Logger(log_filename='database')
 
     def conectar(self):
         """
@@ -40,11 +40,12 @@ class Database:
         """
         try:
             con = sqlite3.connect(self.nombre_db)
-            self.db_logger.loguear_notice(f"Conectado a la base de datos ({self.nombre_db})")
-            return con
+            self.db_logger.loguear_info(f"Conectado a la base de datos ({self.nombre_db})")
         except Error:
             print("Ocurrio un error al intentar conectar con la base de datos")
-            self.db_logger.loguear_error(Error)
+            self.db_logger.loguear_exepcion(Error)
+        else:
+            return con
 
     def crear_tabla(self, conexion):
         """
@@ -64,10 +65,9 @@ class Database:
             conexion.commit()
         except Error:
             print("Hubo un error al crear tabla")
-            self.db_logger.loguear_error(Error)
+            self.db_logger.loguear_exepcion(Error)
 
-    @staticmethod
-    def insertar_registro(conexion, turno: Turno):
+    def insertar_registro(self, conexion, turno: Turno):
         """Inserta un registro nuevo en la tabla turnos"""
 
         datos = turno.db_values()
@@ -76,6 +76,7 @@ class Database:
         cursor.execute(f"""INSERT INTO turnos ({', '.join(datos.keys())})
                            VALUES({', '.join([f':{c}' for c in datos.keys()])})""",
                        datos)
+        self.db_logger.loguear_info(f'Se insertó un registro en la bd.')
         conexion.commit()
 
     @staticmethod
@@ -100,17 +101,13 @@ class Database:
         cursor = conexion.cursor()
         cursor.execute("DELETE FROM turnos WHERE id=:id", {'id': id_turno})
         conexion.commit()
-        self.db_logger.loguear_notice(f'Registro con id [{id_turno}] eliminado.')
+        self.db_logger.loguear_info(f'Registro con id [{id_turno}] eliminado.')
 
-    @staticmethod
-    def actualizar_registro(conexion, _id, turno):
+    def actualizar_registro(self, conexion, _id, turno):
         """Actualiza un registro en la tabla segun su id"""
         datos = turno.db_values()
         datos['id'] = _id
         cursor = conexion.cursor()
         cursor.execute(f'UPDATE turnos {update_string()} WHERE id=:id', datos)
+        self.db_logger.loguear_info(f'Registro con id [{_id}] actualizado.')
         conexion.commit()
-
-
-if __name__ == '__main__':
-    pass

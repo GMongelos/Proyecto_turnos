@@ -108,7 +108,7 @@ class Program:
         """Termina la ejecucion de la aplicacion"""
 
         consola.print("\nUsted decidio salir de la aplicacion")
-        logger = Logger()
+        logger = Logger(log_filename='main')
         logger.loguear_exit()
         time.sleep(3)
         self.con.close()
