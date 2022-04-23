@@ -3,7 +3,7 @@ import re
 regexpr = {
     'dni': r'^(PAS |pas )?[0-9]+$',
     'texto': r'^[^0-9]{2,}$',
-    'email': r'[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+',
+    'mail': r'[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+',
     'fecha': r'^(20\d{2})/(0[1-9]|1[0-2])/(0[1-9]|[12][0-9]|3[01])$'
 }
 
@@ -29,3 +29,10 @@ def fecha(s: str):
     Validacion de tipo fecha, espera una fecha con el separador '/'
     """
     return re.match(regexpr.get('fecha'), s.strip())
+
+
+def mail(s: str):
+    """
+    Validacion de tipo mail, espera un mail
+    """
+    return re.match(regexpr.get('mail'), s.strip())

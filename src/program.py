@@ -1,23 +1,28 @@
 import sys
 import time
 
-from modelo import Database
+import modelo
+from modelo import engine
+from modelo import TurnoORM
+
 from src.model.exceptions import CamposVaciosError
 from src.model.turno import Turno
 from src.vista import consola
 from src.logger import Logger
-from src.validador import texto, dni, fecha
+from src.validador import texto, dni, fecha, mail
+
+from sqlalchemy.orm import Session
 
 
 class Program:
     def __init__(self):
         """Al inicio del programa, me conecto con la db y creo la tabla vacia si no existe"""
 
-        self.db = Database("turnos")
+        # self.db = Database("turnos")
 
         # Me conecto a la base de datos y creo la tabla
-        self.con = self.db.conectar()
-        self.db.crear_tabla(self.con)
+        # self.con = self.db.conectar()
+        # self.db.crear_tabla(self.con)
 
         self.menu = {
             '1': ("Agregar turno", self.agregar_turno),
@@ -38,33 +43,49 @@ class Program:
         datos_turno = {
             'nombre': consola.input("Nombre del paciente: ", texto),
             'apellido': consola.input("Apellido del paciente: ", texto),
-            'nro_dni': consola.input("DNI del paciente: ", dni),
-            '_fecha': consola.input("Fecha del turno(AAAA/MM/DD): ", fecha),
+            'dni': consola.input("DNI del paciente: ", dni),
+            'mail': consola.input("Mail del paciente(opcional): ", mail),
+            'fecha': consola.input("Fecha del turno(AAAA/MM/DD): ", fecha),
             'profesional': consola.input("Profesional que lo atiende: ", texto),
             'observaciones': consola.input("Observaciones(opcional): ")
         }
 
         try:
-            turno = Turno(**datos_turno)
+            with Session(engine) as session:
+                nuevo_turno = TurnoORM(**datos_turno)
         except CamposVaciosError as e:
             consola.print(e)
             self.agregar_turno()
         else:
-            self.db.insertar_registro(self.con, turno)
+            session.add(nuevo_turno)
+            session.commit()
             consola.separador("Turno agregado!")
+
+        # try:
+        #     turno = Turno(**datos_turno)
+        # except CamposVaciosError as e:
+        #     consola.print(e)
+        #     self.agregar_turno()
+        # else:
+        #     self.db.insertar_registro(self.con, turno)
 
     def ver_turnos(self):
         """Se visualizan en pantalla todos los turnos"""
-        turnos = self.db.obtener_registros(self.con)
+        # turnos = self.db.obtener_registros(self.con)
+        turnos = modelo.obtener_registros()
 
         if not turnos:
             consola.separador("Aún no hay turnos cargados")
         else:
-            columnas = 'NOMBRE', 'APELLIDO', 'DNI', 'FECHA', 'PROFESIONAL', 'OBSERVACIONES'
+            columnas = 'NOMBRE', 'APELLIDO', 'DNI', 'FECHA', 'PROFESIONAL', 'OBSERVACIONES', 'MAIL'
             datos = {k: [] for k in columnas}
             for turno in turnos:
-                for i, dato in enumerate(turno[1::]):
-                    datos[columnas[i]].append(dato)
+                atrss: dict = turno[0].atrss()
+
+                for key, value in atrss.items():
+                    if key.upper() not in columnas:
+                        continue
+                    datos[key.upper()].append(value)
 
             consola.renderizar_tabla(title="TURNOS", cols=columnas, rows=datos)
 
@@ -72,15 +93,17 @@ class Program:
         """Busca el ultimo turno por dni y lo modifica/elimina, según la eleccion"""
 
         nro_dni = consola.input("Ingrese el dni para buscar su ultimo turno: ", dni)
-        datos_db = self.db.seleccionar_registro(self.con, nro_dni)
+        # datos_db = self.db.seleccionar_registro(self.con, nro_dni)
+        datos_db = modelo.seleccionar_registro(nro_dni)
 
         if not datos_db:
             consola.separador("No se encontro ningun turno asociado al dni.")
         else:
-            turno = Turno(*datos_db[1::])
-            id_db = datos_db[0]
+            # turno = Turno(*datos_db[1::])
+            # id_db = datos_db[0]
 
-            menu = {n: (k, v) for n, (k, v) in enumerate(turno.__dict__.items(), 1)}
+            menu = {n: (k, v) for n, (k, v) in enumerate(datos_db.atrss(False).items(), 1)}
+
             menu[len(menu) + 1] = ("Eliminar Turno", None)
 
             consola.renderizar_modificar_turno(menu)
@@ -88,7 +111,7 @@ class Program:
 
             if int(index) == len(menu):
                 # Borramos el registro de la base
-                self.db.borrar_registro(self.con, id_db)
+                # self.db.borrar_registro(self.con, id_db)
                 consola.print("\nTurno eliminado!")
                 consola.separador()
                 return
