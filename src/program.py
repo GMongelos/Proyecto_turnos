@@ -2,27 +2,20 @@ import sys
 import time
 
 import modelo
-from modelo import engine
 from modelo import TurnoORM
-from modelo import session
 
 from src.model.exceptions import CamposVaciosError
 from src.vista import consola
 from src.logger import Logger
-from src.validador import texto, dni, fecha, mail
+from src.validador import texto, dni, fecha, mail, validadores
 
 from sqlalchemy.orm import Session
 
 
 class Program:
-    def __init__(self):
+    def __init__(self, session: Session):
         """Al inicio del programa, me conecto con la db y creo la tabla vacia si no existe"""
-
-        # self.db = Database("turnos")
-
-        # Me conecto a la base de datos y creo la tabla
-        # self.con = self.db.conectar()
-        # self.db.crear_tabla(self.con)
+        self.session = session
 
         self.menu = {
             '1': ("Agregar turno", self.agregar_turno),
@@ -51,27 +44,17 @@ class Program:
         }
 
         try:
-            with Session(engine) as session:
-                nuevo_turno = TurnoORM(**datos_turno)
+            nuevo_turno = TurnoORM(**datos_turno)
+            self.session.add(nuevo_turno)
+            self.session.commit()
+            consola.separador("Turno agregado!")
+
         except CamposVaciosError as e:
             consola.print(e)
             self.agregar_turno()
-        else:
-            session.add(nuevo_turno)
-            session.commit()
-            consola.separador("Turno agregado!")
-
-        # try:
-        #     turno = Turno(**datos_turno)
-        # except CamposVaciosError as e:
-        #     consola.print(e)
-        #     self.agregar_turno()
-        # else:
-        #     self.db.insertar_registro(self.con, turno)
 
     def ver_turnos(self):
         """Se visualizan en pantalla todos los turnos"""
-        # turnos = self.db.obtener_registros(self.con)
         turnos = modelo.obtener_registros()
 
         if not turnos:
@@ -93,16 +76,12 @@ class Program:
         """Busca el ultimo turno por dni y lo modifica/elimina, según la eleccion"""
 
         nro_dni = consola.input("Ingrese el dni para buscar su ultimo turno: ", dni)
-        datos_db = modelo.seleccionar_registro(nro_dni)
+        turno = modelo.seleccionar_registro(nro_dni)
 
-        if not datos_db:
+        if not turno:
             consola.separador("No se encontro ningun turno asociado al dni.")
         else:
-            # turno = Turno(*datos_db[1::])
-            # id_db = datos_db[0]
-
-            menu = {n: (k, v) for n, (k, v) in enumerate(datos_db.atrss(False).items(), 1)}
-
+            menu = {n: (k, v) for n, (k, v) in enumerate(turno.atrss(False).items(), 1)}
             menu[len(menu) + 1] = ("Eliminar Turno", None)
 
             consola.renderizar_modificar_turno(menu)
@@ -110,7 +89,6 @@ class Program:
 
             if int(index) == len(menu):
                 # Borramos el registro de la base
-                # self.db.borrar_registro(self.con, id_db)
                 consola.print("\nTurno eliminado!")
                 consola.separador()
                 return
@@ -118,25 +96,13 @@ class Program:
             else:
                 campo = menu[int(index)][0]
 
-                validadores = {
-                    'nombre': texto,
-                    'apellido': texto,
-                    'dni': dni,
-                    'profesional': texto,
-                    'fecha': fecha,
-                    'observaciones': texto
-                }
-
                 validador = validadores[campo]
                 valor = consola.input(f"Ingrese nuevo valor para {campo.lower()}: ", validador)
-                datos_db.update(campo, valor)
+                turno.update(campo, valor)
 
-            # Actualizamos el registro
-            # with Session(engine) as session:
-            session.add(datos_db)
-            session.commit()
+            self.session.add(turno)
+            self.session.commit()
 
-            # self.db.actualizar_registro(self.con, id_db, turno)
             consola.print("\nTurno actualizado!")
             consola.separador()
 
@@ -147,5 +113,4 @@ class Program:
         logger = Logger(log_filename='main')
         logger.loguear_exit()
         time.sleep(3)
-        # self.con.close()
         sys.exit()

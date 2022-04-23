@@ -7,7 +7,6 @@ regexpr = {
     'fecha': r'^(20\d{2})/(0[1-9]|1[0-2])/(0[1-9]|[12][0-9]|3[01])$'
 }
 
-
 def texto(s: str):
     """
     Validacion de tipo texto, espera por lo menos 2 caracteres
@@ -36,3 +35,13 @@ def mail(s: str):
     Validacion de tipo mail, espera un mail
     """
     return re.match(regexpr.get('mail'), s.strip())
+
+validadores = {
+    'nombre': texto,
+    'apellido': texto,
+    'dni': dni,
+    'profesional': texto,
+    'fecha': fecha,
+    'observaciones': texto,
+    'mail': mail
+}

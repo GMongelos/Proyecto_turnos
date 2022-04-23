@@ -88,11 +88,6 @@ class Vista:
         for n, (k, v) in menu.items():
             print(f'{n} - {k}: {v if v else ""}')
 
-        # datos = turno.__dict__.copy()
-        # for count, (key, value) in enumerate(datos.items(), 1):
-        #     print(f'{count} - {key.capitalize()}: {value}')
-        # print(f'{len(datos) + 1} - Eliminar Turno')
-
     def renderizar_tabla(self, title="", cols=None, rows: Dict = None):
         """
         Renderiza una tabla y sus datos
