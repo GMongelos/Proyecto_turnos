@@ -4,9 +4,9 @@ import time
 import modelo
 from modelo import engine
 from modelo import TurnoORM
+from modelo import session
 
 from src.model.exceptions import CamposVaciosError
-from src.model.turno import Turno
 from src.vista import consola
 from src.logger import Logger
 from src.validador import texto, dni, fecha, mail
@@ -93,7 +93,6 @@ class Program:
         """Busca el ultimo turno por dni y lo modifica/elimina, según la eleccion"""
 
         nro_dni = consola.input("Ingrese el dni para buscar su ultimo turno: ", dni)
-        # datos_db = self.db.seleccionar_registro(self.con, nro_dni)
         datos_db = modelo.seleccionar_registro(nro_dni)
 
         if not datos_db:
@@ -118,12 +117,26 @@ class Program:
 
             else:
                 campo = menu[int(index)][0]
-                validador = turno.validadores[campo]
+
+                validadores = {
+                    'nombre': texto,
+                    'apellido': texto,
+                    'dni': dni,
+                    'profesional': texto,
+                    'fecha': fecha,
+                    'observaciones': texto
+                }
+
+                validador = validadores[campo]
                 valor = consola.input(f"Ingrese nuevo valor para {campo.lower()}: ", validador)
-                turno.update(campo, valor)
+                datos_db.update(campo, valor)
 
             # Actualizamos el registro
-            self.db.actualizar_registro(self.con, id_db, turno)
+            # with Session(engine) as session:
+            session.add(datos_db)
+            session.commit()
+
+            # self.db.actualizar_registro(self.con, id_db, turno)
             consola.print("\nTurno actualizado!")
             consola.separador()
 
@@ -134,5 +147,5 @@ class Program:
         logger = Logger(log_filename='main')
         logger.loguear_exit()
         time.sleep(3)
-        self.con.close()
+        # self.con.close()
         sys.exit()

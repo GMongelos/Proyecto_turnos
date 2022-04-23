@@ -60,20 +60,27 @@ class TurnoORM(Base):
             del(d['id'])
         return d
 
+    def update(self, campo, valor):
+        """
+        Actualiza el valor de un campo
+        """
+        self.__setattr__(campo, valor)
+
 
 engine = create_engine(f"sqlite:///{DB_NAME}.db", echo=True, future=True)
+session = Session(engine)
 Base.metadata.create_all(engine)
 
 
 def obtener_registros():
-    session = Session(engine)
+    # session = Session(engine)
     consulta = select(TurnoORM).order_by(TurnoORM.fecha.desc())
 
     return session.execute(consulta).all()
 
 
 def seleccionar_registro(dni):
-    session = Session(engine)
+    # session = Session(engine)
     consulta = select(TurnoORM).where(TurnoORM.dni == dni).order_by(TurnoORM.fecha.desc())
 
     dato = session.execute(consulta).first()[0]
