@@ -9,14 +9,12 @@ from src.model.turno import TurnoORM
 
 from src.model.exceptions import CamposVaciosError
 from src.vista import consola
-from src.logger import Logger
+from src.log.logger import Logger
 from src.validador import texto, dni, fecha, mail, validadores
-
-from sqlalchemy.orm import Session
 
 
 class Program:
-    def __init__(self, session: Session):
+    def __init__(self, session: modelo.DBManager):
         """Al inicio del programa, me conecto con la db y creo la tabla vacia si no existe"""
         self.session = session
 
@@ -48,8 +46,9 @@ class Program:
 
         try:
             nuevo_turno = TurnoORM(**datos_turno)
-            self.session.add(nuevo_turno)
-            self.session.commit()
+            self.session.update_create(nuevo_turno)
+            # self.session.add(nuevo_turno)
+            # self.session.commit()
             consola.separador("Turno agregado!")
 
         except CamposVaciosError as e:
@@ -58,7 +57,7 @@ class Program:
 
     def ver_turnos(self):
         """Se visualizan en pantalla todos los turnos"""
-        turnos = modelo.obtener_registros()
+        turnos = self.session.get_todos_turnos()
 
         if not turnos:
             consola.separador("Aún no hay turnos cargados")
@@ -79,7 +78,7 @@ class Program:
         """Busca el ultimo turno por dni y lo modifica/elimina, según la eleccion"""
 
         nro_dni = consola.input("Ingrese el dni para buscar su ultimo turno: ", dni)
-        turno = modelo.seleccionar_registro(nro_dni)
+        turno = self.session.get_turnos_dni(nro_dni)
 
         if not turno:
             consola.separador("No se encontro ningun turno asociado al dni.")
@@ -94,6 +93,7 @@ class Program:
                 # Borramos el registro de la base
                 consola.print("\nTurno eliminado!")
                 consola.separador()
+                self.session.delete(turno)
                 return
 
             else:
@@ -103,8 +103,7 @@ class Program:
                 valor = consola.input(f"Ingrese nuevo valor para {campo.lower()}: ", validador)
                 turno.update(campo, valor)
 
-            self.session.add(turno)
-            self.session.commit()
+            self.session.update_create(turno)
 
             consola.print("\nTurno actualizado!")
             consola.separador()

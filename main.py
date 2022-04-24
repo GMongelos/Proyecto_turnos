@@ -2,14 +2,15 @@
 Aplicacion principal
 """
 
-from src.logger import Logger
-from src.program import Program
-from src.orm.orm import session
+from src.log.logger import Logger
+from src.controller import Program
+from src.orm.orm import Session, engine, DBManager
 
 if __name__ == '__main__':
     try:
-        with session:
-            p = Program(session)
+        with Session(engine) as session:
+            manager = DBManager(session)
+            p = Program(manager)
             while True:
                 p.run()
     except Exception as e:
