@@ -3,9 +3,6 @@ Visualizacion de elementos por consola
 """
 from typing import Dict, Tuple
 
-from src.model.turno import Turno
-
-
 class Vista:
     """
     Clase que encapsula los renderizados de elementos por consola
@@ -66,8 +63,6 @@ class Vista:
         return datos_turno
 
     print = print
-    # def print(self, *args, **kwargs):
-    #     print(*args, **kwargs)
 
     def input(self, propmt='', validador=None):
         """

@@ -1,8 +1,11 @@
+"""
+Controlador
+"""
 import sys
 import time
 
-import modelo
-from modelo import TurnoORM
+import src.orm.orm as modelo
+from src.model.turno import TurnoORM
 
 from src.model.exceptions import CamposVaciosError
 from src.vista import consola

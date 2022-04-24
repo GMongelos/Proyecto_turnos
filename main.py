@@ -4,7 +4,7 @@ Aplicacion principal
 
 from src.logger import Logger
 from src.program import Program
-from modelo import session
+from src.orm.orm import session
 
 if __name__ == '__main__':
     try:
