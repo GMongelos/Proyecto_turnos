@@ -13,32 +13,24 @@ DB_NAME = 'baseturnos'
 engine = create_engine(f"sqlite:///{DB_NAME}.db", echo=True, future=True)
 Base.metadata.create_all(engine)
 
-
-def obtener_registros(session: Session):
-    consulta = select(TurnoORM).order_by(TurnoORM.fecha.desc())
-    return session.execute(consulta).all()
-
-
-def seleccionar_registro(session: Session, dni):
-    consulta = select(TurnoORM).where(TurnoORM.dni == dni).order_by(TurnoORM.fecha.desc())
-
-    dato = session.execute(consulta).first()[0]
-    return dato
-
-
 class DBManager:
     def __init__(self, session: Session):
         self.session = session
 
     @audit('DELETES')
-    def delete(self, *instances):
-        for instance in instances:
-            self.session.delete(instance)
+    def delete(self, *objs):
+        for obj in objs:
+            self.session.delete(obj)
         self.session.commit()
 
-    @audit('CREATE-UPDATE')
-    def update_create(self, *instances):
-        self.session.add_all(instances)
+    @audit('UPDATE')
+    def update(self, *objs):
+        self.session.add_all(objs)
+        self.session.commit()
+
+    @audit('CREATE')
+    def create(self, *objs):
+        self.session.add_all(objs)
         self.session.commit()
 
     def get_todos_turnos(self):

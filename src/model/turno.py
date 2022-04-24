@@ -15,6 +15,8 @@ class TurnoORM(Base):
     profesional = Column(String(30), nullable=False)
     observaciones = Column(String(30))
 
+    modificado = False
+
     def __repr__(self):
         return f"Turno(id={self.id!r}, " \
                f"nombre={self.nombre!r}, " \
@@ -37,4 +39,6 @@ class TurnoORM(Base):
         """
         Actualiza el valor de un campo
         """
+        if self.__getattribute__(campo) != valor:
+            self.modificado = True
         self.__setattr__(campo, valor)

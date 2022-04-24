@@ -3,11 +3,13 @@ Controlador
 """
 import sys
 import time
+from typing import List
 
 import src.orm.orm as modelo
 from src.model.turno import TurnoORM
 
 from src.model.exceptions import CamposVaciosError
+from src.notify.mailer import Notificador, Mailer
 from src.vista import consola
 from src.log.logger import Logger
 from src.validador import texto, dni, fecha, mail, validadores
@@ -17,6 +19,7 @@ class Program:
     def __init__(self, session: modelo.DBManager):
         """Al inicio del programa, me conecto con la db y creo la tabla vacia si no existe"""
         self.session = session
+        self.notificador: List[Notificador] = [Mailer()]
 
         self.menu = {
             '1': ("Agregar turno", self.agregar_turno),
@@ -46,14 +49,16 @@ class Program:
 
         try:
             nuevo_turno = TurnoORM(**datos_turno)
-            self.session.update_create(nuevo_turno)
-            # self.session.add(nuevo_turno)
-            # self.session.commit()
+            self.session.create(nuevo_turno)
             consola.separador("Turno agregado!")
 
         except CamposVaciosError as e:
             consola.print(e)
             self.agregar_turno()
+
+        else:
+            for mailer in self.notificador:
+                mailer.turno_nuevo(nuevo_turno)
 
     def ver_turnos(self):
         """Se visualizan en pantalla todos los turnos"""
@@ -94,6 +99,8 @@ class Program:
                 consola.print("\nTurno eliminado!")
                 consola.separador()
                 self.session.delete(turno)
+                for mailer in self.notificador:
+                    mailer.turno_borrado(turno)
                 return
 
             else:
@@ -103,7 +110,9 @@ class Program:
                 valor = consola.input(f"Ingrese nuevo valor para {campo.lower()}: ", validador)
                 turno.update(campo, valor)
 
-            self.session.update_create(turno)
+            self.session.update(turno)
+            for mailer in self.notificador:
+                mailer.turno_nuevo(turno)
 
             consola.print("\nTurno actualizado!")
             consola.separador()
