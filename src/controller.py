@@ -41,7 +41,7 @@ class Program:
             'nombre': consola.input("Nombre del paciente: ", texto),
             'apellido': consola.input("Apellido del paciente: ", texto),
             'dni': consola.input("DNI del paciente: ", dni),
-            'mail': consola.input("Mail del paciente(opcional): ", mail),
+            'mail': consola.input("Mail del paciente: ", mail),
             'fecha': consola.input("Fecha del turno(AAAA/MM/DD): ", fecha),
             'profesional': consola.input("Profesional que lo atiende: ", texto),
             'observaciones': consola.input("Observaciones(opcional): ")
@@ -57,8 +57,8 @@ class Program:
             self.agregar_turno()
 
         else:
-            for mailer in self.notificador:
-                mailer.turno_nuevo(nuevo_turno)
+            for notificador in self.notificador:
+                notificador.turno_nuevo(nuevo_turno)
 
     def ver_turnos(self):
         """Se visualizan en pantalla todos los turnos"""

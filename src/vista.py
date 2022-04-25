@@ -46,21 +46,21 @@ class Vista:
             print()
             return opcion
 
-    def renderizar_agregar_turno(self, validador):
-        """
-        Genera un mensaje en pantalla por cada input y lo valida segun el tipo
-        """
-
-        self.separador()
-        datos_turno = {
-            'nombre': validador.validar('texto', "Nombre del paciente: "),
-            'apellido': validador.validar('texto', "Apellido del paciente: "),
-            'dni': validador.validar('dni', "DNI del paciente: "),
-            'fecha': validador.validar('fecha', "Fecha del turno(AAAA/MM/DD): "),
-            'profesional': validador.validar('texto', "Profesional que lo atiende: "),
-            'observaciones': input("Observaciones(opcional): ")
-        }
-        return datos_turno
+    # def renderizar_agregar_turno(self, validador):
+    #     """
+    #     Genera un mensaje en pantalla por cada input y lo valida segun el tipo
+    #     """
+    #
+    #     self.separador()
+    #     datos_turno = {
+    #         'nombre': validador.validar('texto', "Nombre del paciente: "),
+    #         'apellido': validador.validar('texto', "Apellido del paciente: "),
+    #         'dni': validador.validar('dni', "DNI del paciente: "),
+    #         'fecha': validador.validar('fecha', "Fecha del turno(AAAA/MM/DD): "),
+    #         'profesional': validador.validar('texto', "Profesional que lo atiende: "),
+    #         'observaciones': input("Observaciones(opcional): ")
+    #     }
+    #     return datos_turno
 
     print = print
 
@@ -117,5 +117,6 @@ class Vista:
                 fila.append(rows[c][i].ljust(anchos[c]))
             print(''.join(fila))
         self.separador()
+
 
 consola = Vista()

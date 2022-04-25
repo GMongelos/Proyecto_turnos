@@ -10,7 +10,7 @@ from src.log.auditor import audit
 
 DB_NAME = 'baseturnos'
 
-engine = create_engine(f"sqlite:///{DB_NAME}.db", echo=True, future=True)
+engine = create_engine(f"sqlite:///{DB_NAME}.db", echo=False, future=True)
 Base.metadata.create_all(engine)
 
 class DBManager:
