@@ -5,6 +5,10 @@ Base = declarative_base()
 
 
 class TurnoORM(Base):
+    """
+    Clase turnos adaptada para el ORM
+    """
+
     __tablename__ = "turnos"
     id = Column(Integer, primary_key=True)
     nombre = Column(String(30), nullable=False)
@@ -14,8 +18,6 @@ class TurnoORM(Base):
     fecha = Column(String(30), nullable=False)
     profesional = Column(String(30), nullable=False)
     observaciones = Column(String(30))
-
-    modificado = False
 
     def __repr__(self):
         return f"Turno(id={self.id!r}, " \
@@ -28,6 +30,11 @@ class TurnoORM(Base):
                f"observaciones={self.observaciones!r})"
 
     def atrss(self, con_id=True):
+        """
+        Retorna un diccionario con los atributos del turno
+
+        @param con_id: el diccionario contiene o no el ID
+        """
         d = self.__dict__.copy()
 
         del (d['_sa_instance_state'])
@@ -37,8 +44,10 @@ class TurnoORM(Base):
 
     def update(self, campo, valor):
         """
-        Actualiza el valor de un campo
+        Actualiza el valor de un campo.
+        Genérico para hacer turno.<campo> = <valor>
+
+        @param campo: campo a modificar
+        @param valor: valor nuevo
         """
-        if self.__getattribute__(campo) != valor:
-            self.modificado = True
         self.__setattr__(campo, valor)

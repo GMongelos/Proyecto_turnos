@@ -112,7 +112,7 @@ class Program:
 
             self.session.update(turno)
             for mailer in self.notificador:
-                mailer.turno_nuevo(turno)
+                mailer.turno_modificado(turno)
 
             consola.print("\nTurno actualizado!")
             consola.separador()
